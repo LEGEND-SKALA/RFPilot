@@ -2,15 +2,15 @@ from fastapi import UploadFile
 import tempfile, os
 from typing import List
 
-from whisper import load_model
+import whisper
 from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import CharacterTextSplitter
 
-from api.schemas.request import PitchEvaluateResponse
+from api.schemas.response import PitchEvaluateResponse
 from api.models.vector_store import load_proposal_vector_db 
 
 def load_whisper_model():
-    return load_model("base")
+    return whisper.load_model("base")
 
 # 발표 음성 파일을 텍스트로 변환
 def transcribe_audio(file: UploadFile) -> str:
@@ -44,13 +44,13 @@ def run_evaluation(transcript: str, panel_count: int, vector_db) -> List[str]:
 
             prompt = f"""{role_prompt}
 
-[발표 내용]
-{chunk}
+                    [발표 내용]
+                    {chunk}
 
-[제안서 내용]
-{context}
+                    [제안서 내용]
+                    {context}
 
-위 발표와 제안서를 비교해 평가하고 개선점을 피드백해줘."""
+                    위 발표와 제안서를 비교해 평가하고 개선점을 피드백해줘."""
             llm = ChatOpenAI()
             feedback_chunk = llm.predict(prompt)
             feedback += f"- 발표 문단 평가: {feedback_chunk}\n"
