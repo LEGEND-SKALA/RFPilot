@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from typing import List
-from api.schemas.pitch import PitchEvaluateResponse
+from api.schemas.response import PitchEvaluateResponse
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
 
 router = APIRouter()
