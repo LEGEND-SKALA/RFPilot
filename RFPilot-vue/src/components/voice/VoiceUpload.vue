@@ -21,7 +21,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import UploadSection from './common/UploadSection.vue'
+import UploadSection from '../common/UploadSection.vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({

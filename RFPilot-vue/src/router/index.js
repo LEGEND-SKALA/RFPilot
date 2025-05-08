@@ -5,11 +5,12 @@ import ProposalSummary from '../components/proposal/ProposalSummary.vue';
 import PrototypeGenerator from '../components/prototype/PrototypeGenerator.vue';
 import EvaluationPage from '../components/evalutaion/EvaluationUpload.vue';
 import ScriptUpload from '../components/script/ScriptUpload.vue';
-import VoiceUpload from '../voice/VoiceUpload.vue';
-import VoiceResult from '../voice/VoiceResult.vue';
-import EvaluationResult from '../components/EvaluationResult.vue';
+import VoiceUpload from '../components/voice/VoiceUpload.vue';
+import VoiceResult from '../components/voice/VoiceResult.vue';
+import EvaluationResult from '../components/evalutaion/EvaluationResult.vue';
 import PrototypeResult from '../components/prototype/PrototypeResult.vue';
-import ScriptResult from '../components/script/ScriptResult.vue'
+import ScriptResult from '../components/script/ScriptResult.vue';
+
 
 const routes = [
   { path: '/script-analysis', name: 'ScriptResult', component: ScriptResult },
@@ -27,7 +28,6 @@ const routes = [
     component: VoiceResult
   }
 ];
-
 const router = createRouter({
   history: createWebHistory(),
   routes,
