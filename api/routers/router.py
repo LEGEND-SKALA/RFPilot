@@ -70,8 +70,8 @@ async def evaluate_pitch(file: UploadFile = File(...), user_panel_count: int = F
     return await evaluate_pitch_audio(file, user_panel_count)
 
 @router.post("/pitch-evaluation/fill", response_model=FillMissingPartsResponse)
-async def fill_missing(request: FillMissingPartsRequest):
-    filled = fill_missing_parts(request.incomplete_text, request.reference_texts)
+async def fill_missing(file: UploadFile = File(...)):
+    filled = fill_missing_parts(file)
     return FillMissingPartsResponse(completed_text=filled)
 
 @router.post("/pitch-evaluation/evaluate-script", response_model=ScriptEvaluateResponse)
@@ -83,15 +83,16 @@ async def evaluate_script_api(request: ScriptEvaluateRequest):
             incorrect_sentences=result["incorrect_sentences"]
         )
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": f"스크립트 평가 중 오류 발생: {str(e)}"})
-
-@router.post("/pitch-evaluation/analyze-similarity", response_model=SimilarityAnalyzeResponse)
-async def analyze_similarity_api(request: SimilarityAnalyzeRequest):
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"스크립트 평가 중 오류 발생: {str(e)}"}
+        )
+    
+@router.post("/analyze-similarity", response_model=SimilarityAnalyzeResponse)
+async def analyze_similarity_api(file: UploadFile = File(...)):
     try:
         result = analyze_similarity(
-            file_path=request.file_path,
-            vector_db_path=request.vector_db_path,
-            top_k=request.top_k
+            file
         )
         return SimilarityAnalyzeResponse(
             average_similarity=result["average_similarity"],
@@ -100,3 +101,4 @@ async def analyze_similarity_api(request: SimilarityAnalyzeRequest):
         )
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"유사도 분석 중 오류 발생: {str(e)}"})
+

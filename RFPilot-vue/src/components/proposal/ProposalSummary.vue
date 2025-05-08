@@ -12,7 +12,7 @@
 
       <div class="block">
         <h4>AI 심사위원 평가</h4>
-        <img src="../assets/judges.png" alt="Judging Robots" class="judges" />
+        <img src="../../assets/judges.png" alt="Judging Robots" class="judges" />
         <textarea readonly>어쩌구 저쩌구 하하하 짱</textarea>
       </div>
 
@@ -25,8 +25,8 @@
 </template>
 
 <script setup>
-import SidebarMenu from './common/SidebarMenu.vue'
-import Header from './common/Header.vue'
+import SidebarMenu from '../common/SidebarMenu.vue'
+import Header from '../common/Header.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
