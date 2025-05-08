@@ -1,54 +1,10 @@
 <template>
+  <Header />
   <div class="result-container">
-    
-    <aside class="sidebar">
-      <Header></Header>
-      <div class="menu">
-        <h3>다른 기능 해보기</h3>
-        <ul>
-          <li @click="goTo('prototype')">
-            <span class="star">⭐</span>
-            <div>
-              <strong>프로토타입 생성</strong>
-              <p>신청 양식에 대한 프로토타입을 생성합니다.</p>
-            </div>
-          </li>
-          <li @click="goTo('evaluation')">
-            <span class="star">⭐</span>
-            <div>
-              <strong>자료 적합도 평가</strong>
-              <p>RFP에 해당하는 자료가 적합한지 평가받습니다.</p>
-            </div>
-          </li>
-          <li @click="goTo('script')">
-            <span class="star">⭐</span>
-            <div>
-              <strong>발표 스크립트 평가</strong>
-              <p>발표 스크립트 파일을 업로드해 평가받습니다.</p>
-            </div>
-          </li>
-          <li @click="goTo('voice')">
-            <span class="star">⭐</span>
-            <div>
-              <strong>발표 음성 평가</strong>
-              <p>자신의 발표 음성 파일을 업로드해 평가받습니다.</p>
-            </div>
-          </li>
-          <li @click="goTo('')">
-            <span class="star">⭐</span>
-            <div>
-              <strong>첫 화면으로 돌아가기</strong>
-              <p>첫 업로드 화면으로 돌아갑니다.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </aside>
-
     <!-- Main Content -->
+     <SidebarMenu></SidebarMenu>
     <section class="content">
       <h1>분석 결과</h1>
-
       <div class="block">
         <h4>제안서 요약</h4>
         <textarea readonly>어쩌구 저쩌구</textarea>
@@ -69,6 +25,7 @@
 </template>
 
 <script setup>
+import SidebarMenu from './common/SidebarMenu.vue'
 import Header from './common/Header.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
