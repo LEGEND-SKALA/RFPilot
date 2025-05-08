@@ -6,7 +6,7 @@ from whisper import load_model
 from langchain.chat_models import ChatOpenAI
 from langchain.text_splitter import CharacterTextSplitter
 
-from api.schemas.request import PitchEvaluateResponse
+from api.schemas.response import PitchEvaluateResponse
 from api.models.vector_store import load_proposal_vector_db 
 
 def load_whisper_model():
