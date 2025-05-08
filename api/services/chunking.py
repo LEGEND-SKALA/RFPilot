@@ -1,14 +1,22 @@
 import re
 import pdfplumber
 from typing import List, Dict, Any
+from fastapi import UploadFile
+import os
+import tempfile
 
 
-def chunk_document_by_section(file_path: str) -> List[Dict[str, Any]]:
+def extract_chunks_from_pdf_upload(uploaded_file: UploadFile) -> List[Dict[str, Any]]:
     chunks = []
     current_section = None
     current_subsection = None
 
-    with pdfplumber.open(file_path) as pdf:
+    # 파일 임시 저장
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(uploaded_file.file.read())
+        tmp_path = tmp.name
+
+    with pdfplumber.open(tmp_path) as pdf:
         for page in pdf.pages:
             text = page.extract_text() or ""
             tables = page.extract_tables()
@@ -44,14 +52,15 @@ def chunk_document_by_section(file_path: str) -> List[Dict[str, Any]]:
                     if current_subsection:
                         current_subsection["content"] += line + "\n"
                     elif current_section:
-                        # 소제목 없이 본문이 이어질 경우
                         if not current_section.get("content"):
                             current_section["content"] = ""
                         current_section["content"] += line + "\n"
 
-            # 페이지의 테이블을 현재 소제목 또는 섹션에 추가
             for table in tables:
-                table_str = "\n".join([" | ".join([str(cell) if cell is not None else "" for cell in row]) for row in table])
+                table_str = "\n".join([
+                    " | ".join([str(cell) if cell is not None else "" for cell in row])
+                    for row in table
+                ])
                 if current_subsection:
                     current_subsection["tables"].append(table_str)
                 elif current_section:
@@ -59,8 +68,8 @@ def chunk_document_by_section(file_path: str) -> List[Dict[str, Any]]:
                         current_section["tables"] = []
                     current_section["tables"].append(table_str)
 
-    # 마지막 섹션 저장
     if current_section:
         chunks.append(current_section)
 
+    os.remove(tmp_path)  # 임시 파일 삭제
     return chunks
