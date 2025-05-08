@@ -1,4 +1,4 @@
-import models.vector_store as vs
+import api.models.vector_store as vs
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.llms import OpenAI
