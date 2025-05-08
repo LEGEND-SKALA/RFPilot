@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import UploadProposal from '../components/UploadProposal.vue';
-import ProposalSummary from '../components/ProposalSummary.vue';
-import PrototypeGenerator from '../components/PrototypeGenerator.vue';
-import EvaluationPage from '../components/EvaluationUpload.vue';
-import ScriptUpload from '../components/ScriptUpload.vue';
-import VoiceUpload from '../components/VoiceUpload.vue';
-import VoiceResult from '../components/VoiceResult.vue';
+import UploadProposal from '../components/proposal/UploadProposal.vue';
+import ProposalSummary from '../components/proposal/ProposalSummary.vue';
+import PrototypeGenerator from '../components/prototype/PrototypeGenerator.vue';
+import EvaluationPage from '../components/evalutaion/EvaluationUpload.vue';
+import ScriptUpload from '../components/script/ScriptUpload.vue';
+import VoiceUpload from '../voice/VoiceUpload.vue';
+import VoiceResult from '../voice/VoiceResult.vue';
 import EvaluationResult from '../components/EvaluationResult.vue';
-import PrototypeResult from '../components/PrototypeResult.vue';
-import ScriptResult from '../components/ScriptResult.vue'
+import PrototypeResult from '../components/prototype/PrototypeResult.vue';
+import ScriptResult from '../components/script/ScriptResult.vue'
 
 const routes = [
   { path: '/script-analysis', name: 'ScriptResult', component: ScriptResult },
