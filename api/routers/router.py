@@ -12,7 +12,6 @@ from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script import evaluate_script
 from api.agent.evaluate_material import analyze_similarity
 from fastapi.responses import JSONResponse
-
 router = APIRouter()
 
 @router.post("/pitch-evaluate", response_model=PitchEvaluateResponse)
@@ -59,3 +58,5 @@ async def analyze_similarity_api(request: SimilarityAnalyzeRequest):
             status_code=500,
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
+    return await evaluate_pitch_audio(file, user_panel_count)
+
