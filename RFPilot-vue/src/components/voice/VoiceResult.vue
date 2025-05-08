@@ -1,19 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <ResultView
-      title="음성 분석 및 평가 결과"
-      :score="85"
-      :sections="[
-        { label: '요약', text: '어쩌구 저쩌구' },
-        { label: 'AI 심사위원 평가', image: '/assets/judges.png', text: '어쩌구 하하 짱' }
-      ]"
-    />
-  </template>
-  
-  <script setup>
-  import ResultView from '../common/ResultView.vue'
-  </script>
-=======
   <ResultView
     title="🎤 발표 평가 결과"
     :score="score"
@@ -24,7 +9,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import ResultView from '../components/common/ResultView.vue'
+import ResultView from '../../components/common/ResultView.vue'
 import axios from 'axios'
 
 // 파일과 심사위원 수를 params로 전달받음
@@ -62,4 +47,3 @@ onMounted(async () => {
   }
 })
 </script>
->>>>>>> 134041bac195f1c3372dc7333c102aac011c9542
