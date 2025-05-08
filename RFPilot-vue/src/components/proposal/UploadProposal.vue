@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left">
-      <img src="../assets/logo.png" alt="RFPilot Logo" class="logo" />
+      <img src="../../assets/logo.png" alt="RFPilot Logo" class="logo" />
       <h2 class="subtitle">
         RFP 작성과 발표, AI가 함께 준비해주는<br />
         스마트 심사 시뮬레이션
@@ -36,7 +36,7 @@
 
 
     <div class="right">
-      <img src="../assets/homerobot.png" alt="AI Robot" class="robot" />
+      <img src="../../assets/homerobot.png" alt="AI Robot" class="robot" />
     </div>
   </div>
 </template>

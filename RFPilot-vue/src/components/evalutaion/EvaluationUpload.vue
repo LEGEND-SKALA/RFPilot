@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import UploadSection from './common/UploadSection.vue'
+import UploadSection from '../common/UploadSection.vue'
 </script>
