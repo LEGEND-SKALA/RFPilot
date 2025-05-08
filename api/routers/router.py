@@ -90,15 +90,4 @@ async def evaluate_script_api(request: ScriptEvaluateRequest):
     
 @router.post("/analyze-similarity", response_model=SimilarityAnalyzeResponse)
 async def analyze_similarity_api(file: UploadFile = File(...)):
-    try:
-        result = analyze_similarity(
-            file
-        )
-        return SimilarityAnalyzeResponse(
-            average_similarity=result["average_similarity"],
-            most_similar_sentences=result["most_similar_sentences"],
-            least_similar_sentences=result["least_similar_sentences"]
-        )
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": f"유사도 분석 중 오류 발생: {str(e)}"})
-
+        return JSONResponse(status_code=500, content={"error": f"스크립트 평가 중 오류 발생: {str(e)}"})
