@@ -14,7 +14,7 @@ from api.agent.evaluate_material import analyze_similarity
 from fastapi.responses import JSONResponse
 router = APIRouter()
 
-@router.post("/pitch-evaluate", response_model=PitchEvaluateResponse)
+@router.post("", response_model=PitchEvaluateResponse)
 async def evaluate_pitch(
     file: UploadFile = File(...),
     user_panel_count: int = Form(...)
