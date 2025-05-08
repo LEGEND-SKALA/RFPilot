@@ -11,6 +11,7 @@ import EvaluationResult from '../components/evalutaion/EvaluationResult.vue';
 import PrototypeResult from '../components/prototype/PrototypeResult.vue';
 import ScriptResult from '../components/script/ScriptResult.vue';
 
+
 const routes = [
   { path: '/script-analysis', name: 'ScriptResult', component: ScriptResult },
   { path: '/prototype-result', name: 'PrototypeResult', component: PrototypeResult },
