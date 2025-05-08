@@ -1,59 +1,174 @@
 <template>
-    <div class="max-w-4xl mx-auto p-6 space-y-8">
-      <section>
-        <h2 class="text-2xl font-bold mb-2">📄 제안서 요약</h2>
-        <p class="bg-gray-100 p-4 rounded">{{ summary }}</p>
-      </section>
-  
-      <section>
-        <h2 class="text-2xl font-bold mb-2">🤖 AI 심사위원 목록</h2>
-        <ul class="space-y-2">
-          <li v-for="(reviewer, index) in reviewers" :key="index" class="bg-white p-3 shadow rounded">
-            <strong>{{ reviewer.role }}</strong>: {{ reviewer.criteria }}
+  <div class="result-container">
+    
+    <aside class="sidebar">
+      <Header></Header>
+      <div class="menu">
+        <h3>다른 기능 해보기</h3>
+        <ul>
+          <li @click="goTo('prototype')">
+            <span class="star">⭐</span>
+            <div>
+              <strong>프로토타입 생성</strong>
+              <p>신청 양식에 대한 프로토타입을 생성합니다.</p>
+            </div>
+          </li>
+          <li @click="goTo('evaluation')">
+            <span class="star">⭐</span>
+            <div>
+              <strong>자료 적합도 평가</strong>
+              <p>RFP에 해당하는 자료가 적합한지 평가받습니다.</p>
+            </div>
+          </li>
+          <li @click="goTo('script')">
+            <span class="star">⭐</span>
+            <div>
+              <strong>발표 스크립트 평가</strong>
+              <p>발표 스크립트 파일을 업로드해 평가받습니다.</p>
+            </div>
+          </li>
+          <li @click="goTo('voice')">
+            <span class="star">⭐</span>
+            <div>
+              <strong>발표 음성 평가</strong>
+              <p>자신의 발표 음성 파일을 업로드해 평가받습니다.</p>
+            </div>
+          </li>
+          <li @click="goTo('')">
+            <span class="star">⭐</span>
+            <div>
+              <strong>첫 화면으로 돌아가기</strong>
+              <p>첫 업로드 화면으로 돌아갑니다.</p>
+            </div>
           </li>
         </ul>
-      </section>
-  
-      <section>
-        <h2 class="text-2xl font-bold mb-2">📊 제안 적합도 점수</h2>
-        <ul class="grid grid-cols-2 gap-4">
-          <li v-for="(score, key) in scores" :key="key" class="bg-blue-50 p-4 rounded shadow">
-            <div class="font-semibold">{{ key }}</div>
-            <div class="text-lg">{{ score }}점</div>
-          </li>
-        </ul>
-      </section>
-  
-      <section>
-        <h2 class="text-2xl font-bold mb-2">✨ 트렌드 기반 기능 제안</h2>
-        <p class="bg-gray-100 p-4 rounded">{{ trendSuggestion }}</p>
-      </section>
-    </div>
-  </template>
-  
-  <script setup>
-  const summary = `이 제안서는 AI를 활용한 스마트 물류 시스템 구축 방안을 설명합니다. 기술 구성과 개발일정, 예산안이 포함되어 있습니다.`;
-  
-  const reviewers = [
-    { role: '기술 전문가', criteria: 'AI 모델 구조의 실현 가능성과 기술력 검토' },
-    { role: '사업 총괄', criteria: '일정과 예산의 현실성 평가' },
-    { role: '시장 분석가', criteria: '목표 대비 시장 적합성 분석' },
-  ];
-  
-  const scores = {
-    기술: 82,
-    일정: 90,
-    예산: 78,
-    목표: 85,
-  };
-  
-  const trendSuggestion = `최근 정부과제의 기술 동향과 비교해, 자동화 물류 시스템 외에도 AI 기반 수요 예측 모듈을 추가하는 것이 경쟁력 확보에 도움이 됩니다.`;
-  </script>
-  
-  <style scoped>
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  </style>
-  
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="content">
+      <h1>분석 결과</h1>
+
+      <div class="block">
+        <h4>제안서 요약</h4>
+        <textarea readonly>어쩌구 저쩌구</textarea>
+      </div>
+
+      <div class="block">
+        <h4>AI 심사위원 평가</h4>
+        <img src="../assets/judges.png" alt="Judging Robots" class="judges" />
+        <textarea readonly>어쩌구 저쩌구 하하하 짱</textarea>
+      </div>
+
+      <div class="block">
+        <h4>트렌드 기반 기능 제안</h4>
+        <textarea readonly>어쩌구 저쩌구</textarea>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import Header from './common/Header.vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const goTo = (target) => {
+  router.push(`/${target}`)
+}
+
+</script>
+
+<style scoped>
+.result-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.sidebar {
+  width: 300px;
+  padding: 30px;
+  background-color: #f9fafb;
+  border-right: 1px solid #ddd;
+}
+
+.logo {
+  width: 140px;
+  margin-bottom: 20px;
+}
+
+.menu h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.menu li div {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu li strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.menu li p {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0 0;
+}
+
+.content {
+  flex: 1;
+  padding: 10px 60px;
+}
+
+.content h1 {
+  font-size: 32px;
+  margin-bottom: 32px;
+  color: #1e2a39;
+}
+
+.block {
+  margin-bottom: 32px;
+}
+
+.block h4 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #1e2a39;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  padding: 14px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: none;
+}
+
+.judges {
+  padding-left: 50px;
+  padding-right: 50px;
+  justify-content: space-between;
+  margin: 12px 0;
+  width: 50%;
+}
+</style>
