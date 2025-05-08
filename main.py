@@ -1,6 +1,6 @@
 # main.py
 from fastapi import FastAPI
-from api.routers.pitch_router import router as pitch_router
+from api.routers.router import router as pitch_router
 from api.routers.chunk_router import router as chunk_router
 from dotenv import load_dotenv
 import os
