@@ -37,13 +37,36 @@ function handleFileUpload(event) {
   presentationFile.value = event.target.files[0];
 }
 
-function evaluateRelevance() {
-  // 임시 결과 시뮬레이션
-  evaluationResult.value = [
-    '기술 항목 적합도: 85%',
-    '일정 계획 일치도: 90%',
-    '예산 계획 연관성: 78%',
-    '전체 평가: 높은 관련성'
-  ];
+async function evaluateRelevance() {
+  try {
+    const response = await fetch('http://localhost:8000/analyze-similarity', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        file_path: "uploaded_docs/proposal_001.txt",         // 실제 업로드된 제안서 경로
+        top_k: 5                                              // 유사도 비교 문장 수
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error('API 호출 실패')
+    }
+
+    const data = await response.json()
+
+    evaluationResult.value = [
+      `평균 유사도: ${Math.round(data.average_similarity * 100)}%`,
+      `가장 유사한 문장: ${data.most_similar_sentences[0]}`,
+      `가장 관련 없는 문장: ${data.least_similar_sentences[0]}`,
+      data.average_similarity > 0.8 ? '전체 평가: 높은 관련성' :
+      data.average_similarity > 0.6 ? '전체 평가: 보통 관련성' :
+                                      '전체 평가: 낮은 관련성'
+    ]
+  } catch (error) {
+    console.error('유사도 평가 중 오류:', error)
+    evaluationResult.value = ['유사도 평가 실패']
+  }
 }
 </script>

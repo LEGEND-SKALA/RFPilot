@@ -56,9 +56,39 @@ const handleFileChange = (e) => {
   }
 }
 
-const goToSummary = () => {
-  router.push('/') // 반드시 라우터에 이 경로 등록되어 있어야 함
+const goToSummary = async () => {
+  const file = fileInput.value?.files[0]
+  if (!file) return
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    const response = await fetch('http://localhost:8000/fill/', {
+      method: 'POST',
+      body: formData, // 파일 포함한 FormData 사용
+    })
+
+    if (!response.ok) {
+      throw new Error('서버 응답 실패')
+    }
+
+    const data = await response.json()
+    const completedText = data.completed_text
+
+    // 결과 페이지로 이동하며 응답 전달
+    router.push({
+      name: 'SummaryResult',
+      query: { result: encodeURIComponent(completedText) }
+    })
+
+  } catch (error) {
+    console.error('API 호출 실패:', error)
+    alert('문장 생성 중 오류가 발생했습니다.')
+  }
 }
+
+
 </script>
 
 <style scoped>
