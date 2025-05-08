@@ -9,7 +9,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import ResultView from '../components/common/ResultView.vue'
+import ResultView from '../../components/common/ResultView.vue'
 import axios from 'axios'
 
 // 파일과 심사위원 수를 params로 전달받음
