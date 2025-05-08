@@ -10,5 +10,5 @@
   </template>
   
   <script setup>
-  import ResultView from '../components/common/ResultView.vue'
+  import ResultView from '../common/ResultView.vue'
   </script>
