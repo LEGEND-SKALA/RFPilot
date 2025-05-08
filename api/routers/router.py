@@ -22,8 +22,8 @@ async def evaluate_pitch(
     return await evaluate_pitch_audio(file, user_panel_count)
 
 @router.post("/fill/", response_model=FillMissingPartsResponse)
-async def fill_missing(request: FillMissingPartsRequest):
-    filled = fill_missing_parts(request.incomplete_text, request.reference_texts)
+async def fill_missing(file: UploadFile = File(...)):
+    filled = fill_missing_parts(file)
     return FillMissingPartsResponse(completed_text=filled)
 
 @router.post("/evaluate-script", response_model=ScriptEvaluateResponse)
@@ -41,12 +41,10 @@ async def evaluate_script_api(request: ScriptEvaluateRequest):
         )
     
 @router.post("/analyze-similarity", response_model=SimilarityAnalyzeResponse)
-async def analyze_similarity_api(request: SimilarityAnalyzeRequest):
+async def analyze_similarity_api(file: UploadFile = File(...)):
     try:
         result = analyze_similarity(
-            file_path=request.file_path,
-            vector_db_path=request.vector_db_path,
-            top_k=request.top_k
+            file
         )
         return SimilarityAnalyzeResponse(
             average_similarity=result["average_similarity"],
@@ -58,5 +56,4 @@ async def analyze_similarity_api(request: SimilarityAnalyzeRequest):
             status_code=500,
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
-    return await evaluate_pitch_audio(file, user_panel_count)
 

@@ -14,7 +14,7 @@
         <div v-for="(section, index) in sections" :key="index" class="block">
           <h4>{{ section.label }}</h4>
           <img v-if="section.image" :src="section.image" class="section-image" />
-          <textarea readonly :value="section.text" />
+          <textarea readonly :value="section.text"></textarea>
         </div>
       </section>
     </div>

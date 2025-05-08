@@ -4,6 +4,7 @@ from api.routers.chunk_router import router as chunk_router
 from api.routers.router import router
 from dotenv import load_dotenv
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv() #환경 변수 
 app = FastAPI(title="RFPilot")
