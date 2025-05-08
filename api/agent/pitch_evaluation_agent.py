@@ -44,13 +44,13 @@ def run_evaluation(transcript: str, panel_count: int, vector_db) -> List[str]:
 
             prompt = f"""{role_prompt}
 
-                    [발표 내용]
-                    {chunk}
+[발표 내용]
+{chunk}
 
-                    [제안서 내용]
-                    {context}
+[제안서 내용]
+{context}
 
-                    위 발표와 제안서를 비교해 평가하고 개선점을 피드백해줘."""
+위 발표와 제안서를 비교해 평가하고 개선점을 피드백해줘."""
             llm = ChatOpenAI()
             feedback_chunk = llm.predict(prompt)
             feedback += f"- 발표 문단 평가: {feedback_chunk}\n"
