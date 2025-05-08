@@ -6,6 +6,7 @@ import PrototypeGenerator from '../components/PrototypeGenerator.vue';
 import EvaluationPage from '../components/EvaluationPage.vue';
 import ScriptUpload from '../components/ScriptUpload.vue';
 import VoiceUpload from '../components/VoiceUpload.vue';
+import SummaryResult from '../components/SummaryResult.vue';
 
 const routes = [
   { path: '/', name: 'UploadProposal', component: UploadProposal },
@@ -14,6 +15,7 @@ const routes = [
   { path: '/evaluation', name: 'EvaluationPage', component: EvaluationPage },
   { path: '/script', name: 'ScriptUpload', component: ScriptUpload },
   { path: '/voice', name: 'VoiceUpload', component: VoiceUpload },
+  { path: '/result', name: 'SummaryResult', component: SummaryResult },
 ];
 
 const router = createRouter({
