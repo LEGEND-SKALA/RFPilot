@@ -1,8 +1,9 @@
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # LangChain 호환 Embedding 객체
-embedding_model = HuggingFaceEmbeddings(model_name="snunlp/KR-SBERT-V40K-klueNLI-augSTS")
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 # 벡터 DB 저장 경로
 vector_db_path = "faiss_store"

@@ -1,33 +1,48 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+import SidebarMenu from '../common/SidebarMenu.vue'
+
+const score = ref(0)
+const summary = ref('')
+const evaluations = ref('')
+
+onMounted(() => {
+  const data = JSON.parse(sessionStorage.getItem('evaluation_result'))
+  if (data) {
+    score.value = Math.round(data.average_similarity * 100)
+    summary.value = `가장 유사한 문장: ${data.most_similar_sentences.join('\n')} \n\n가장 덜 유사한 문장: ${data.least_similar_sentences.join('\n')}`
+    evaluations.value = data.evaluated_sentences.join('\n\n')
+  }
+})
+</script>
+
 <template>
-    <div class="result-container">
-      <SidebarMenu />
-  
-      <section class="content">
-        <h1>자료 평가 결과</h1>
-  
-        <div class="score-line">
-          <span>적합도 점수는</span>
-          <strong class="score">85점</strong>
-          <span>입니다!</span>
-        </div>
-  
-        <div class="block">
-          <h4>요약</h4>
-          <textarea readonly>어쩌구 저쩌구</textarea>
-        </div>
-  
-        <div class="block">
-          <h4>AI 심사위원 평가</h4>
-          <img src="../../assets/judges.png" alt="Judging Robots" class="judges" />
-          <textarea readonly>어쩌구 저쩌구 하하하 짱</textarea>
-        </div>
-      </section>
-    </div>
-  </template>
-  
-  <script setup>
-  import SidebarMenu from '../common/SidebarMenu.vue'
-  </script>
+  <div class="result-container">
+    <SidebarMenu />
+
+    <section class="content">
+      <h1>자료 평가 결과</h1>
+
+      <div class="score-line">
+        <span>적합도 점수는</span>
+        <strong class="score">{{ score }}점</strong>
+        <span>입니다!</span>
+      </div>
+
+      <div class="block">
+        <h4>요약</h4>
+        <textarea readonly>{{ summary }}</textarea>
+      </div>
+
+      <div class="block">
+        <h4>AI 심사위원 평가</h4>
+        <img src="../../assets/judges.png" alt="Judging Robots" class="judges" />
+        <textarea readonly>{{ evaluations }}</textarea>
+      </div>
+    </section>
+  </div>
+</template>
+
   
   <style scoped>
   .result-container {

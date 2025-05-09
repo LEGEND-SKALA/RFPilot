@@ -4,13 +4,12 @@ import os
 
 embedding_model = HuggingFaceEmbeddings(model_name="snunlp/KR-SBERT-V40K-klueNLI-augSTS")
 VECTOR_DB_PATH = "faiss_store"
-
-def load_proposal_vector_db(doc_title: str):
-    db_path = os.path.join(VECTOR_DB_PATH, doc_title)
-    if not os.path.exists(db_path):
-        raise FileNotFoundError(f"벡터 DB '{doc_title}'가 존재하지 않습니다.")
-    return FAISS.load_local(
-        folder_path=db_path,
-        embeddings=embedding_model,
-        allow_dangerous_deserialization=True  # ✅ 이 줄 추가
+def load_proposal_vector_db():
+    # embedding = OpenAIEmbeddings()
+    embedding = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_db = FAISS.load_local(
+        "faiss_store",
+        embeddings=embedding,
+        allow_dangerous_deserialization=True  #pkl 파일 허용
     )
+    return vector_db
