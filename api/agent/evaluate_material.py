@@ -6,7 +6,7 @@ import nltk
 from nltk.tokenize import sent_tokenize
 from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-import models.vector_store as vs
+import api.models.vector_store as vs
 
 nltk.download("punkt")
 
