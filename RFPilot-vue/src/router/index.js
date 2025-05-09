@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import UploadProposal from '../components/proposal/UploadProposal.vue';
 import ProposalSummary from '../components/proposal/ProposalSummary.vue';
-import LoadingPage from '../components/proposal/LoadingPage.vue';
+import LoadingPage from '../components/common/LoadingPage.vue';
 import PrototypeGenerator from '../components/prototype/PrototypeGenerator.vue';
 import EvaluationPage from '../components/evalutaion/EvaluationUpload.vue';
 import ScriptUpload from '../components/script/ScriptUpload.vue';

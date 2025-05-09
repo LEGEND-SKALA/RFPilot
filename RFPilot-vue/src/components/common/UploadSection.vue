@@ -77,7 +77,6 @@
     if (props.onProcess && uploadedFile.value) {
       await props.onProcess(uploadedFile.value)
     }
-    router.push(props.nextRoute)
   }
   </script>
   

@@ -26,6 +26,9 @@
   const toggleMenu = () => (showMenu.value = !showMenu.value)
   
   const navigate = (path) => {
+    if (path === '/') {
+      sessionStorage.clear() 
+    }
     router.push(path)
     showMenu.value = false
   }
@@ -37,6 +40,7 @@
     { text: '발표 스크립트 업로드', route: '/script' },
     { text: '발표 음성 평가', route: '/voice' }
   ]
+
   </script>
   
   <style scoped>

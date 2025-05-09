@@ -49,6 +49,9 @@
   ]
   
   const goTo = (route) => {
+    if (route === '/') {
+      sessionStorage.clear()  // ✅ 여기에 추가
+    }
     router.push(route)
   }
   </script>
