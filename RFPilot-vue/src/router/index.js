@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import UploadProposal from '../components/proposal/UploadProposal.vue';
 import ProposalSummary from '../components/proposal/ProposalSummary.vue';
+import LoadingPage from '../components/proposal/LoadingPage.vue';
 import PrototypeGenerator from '../components/prototype/PrototypeGenerator.vue';
 import EvaluationPage from '../components/evalutaion/EvaluationUpload.vue';
 import ScriptUpload from '../components/script/ScriptUpload.vue';
@@ -16,6 +17,7 @@ const routes = [
   { path: '/script-analysis', name: 'ScriptResult', component: ScriptResult },
   { path: '/prototype-result', name: 'PrototypeResult', component: PrototypeResult },
   { path: '/', name: 'UploadProposal', component: UploadProposal },
+  { path: '/loading', name: 'LoadingPage', component: LoadingPage },  
   { path: '/summary', name: 'ProposalSummary', component: ProposalSummary },
   { path: '/prototype', name: 'PrototypeGenerator', component: PrototypeGenerator },
   { path: '/evaluation', name: 'EvaluationPage', component: EvaluationPage },
