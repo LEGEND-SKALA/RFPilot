@@ -1,8 +1,9 @@
 import api.models.vector_store as vs
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.llms import OpenAI
-from langchain.chains import LLMChain
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.llms.openai import OpenAI
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableSequence
 from langchain.prompts import PromptTemplate
 from langchain.docstore.document import Document
 from fastapi import UploadFile
@@ -22,7 +23,7 @@ def search_similar_docs(query: str, top_k: int = 3):
 
 # 3. LLM을 이용해 문서 보완
 from fastapi import UploadFile
-from langchain import OpenAI, LLMChain, PromptTemplate
+from langchain import OpenAI, PromptTemplate
 from langchain.vectorstores.base import VectorStoreRetriever  # vector_db 타입 힌트
 from typing import List
 
@@ -59,7 +60,7 @@ def fill_missing_parts(file: UploadFile, vector_db: VectorStoreRetriever) -> str
         """
     )
 
-    chain = LLMChain(llm=llm, prompt=prompt_template)
+    chain = chain = RunnableSequence([prompt_template, llm, StrOutputParser()])
     references_combined = "\n\n".join(reference_texts)
     output = chain.run({"incomplete": incomplete_text, "references": references_combined})
     return output

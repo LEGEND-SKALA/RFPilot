@@ -3,7 +3,7 @@ import tempfile, os
 from typing import List
 
 import whisper
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.text_splitter import CharacterTextSplitter
 
 from api.schemas.response import PitchEvaluateResponse

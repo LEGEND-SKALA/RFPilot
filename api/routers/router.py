@@ -1,12 +1,30 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from typing import List
-
+from api.agent.summarize import summarize_proposal
+from api.services.createdb import create_proposal_vector_db
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
 from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script_agent import evaluate_script
 from api.agent.evaluate_material import analyze_similarity
-from fastapi.responses import JSONResponse
+from api.services.chunking import extract_text_from_file
+from api.services.chunking import chunk_text
+from api.services.embedding import embed_chunks
+from api.agent.generate_people import create_judge_agents
+
+from api.agent.summary_agent import summarize_proposal
+from api.agent.generate_judges import generate_judges
+from api.agent.analysis_fit_agent import analyze_fit
+from api.agent.suggest_trends_agent import suggest_trends
+
+from api.schemas.response import (
+    PitchEvaluateResponse, FillMissingPartsResponse,
+    ScriptEvaluateResponse, SimilarityAnalyzeResponse
+)
+from api.schemas.request import (
+    FillMissingPartsRequest, ScriptEvaluateRequest,
+    SimilarityAnalyzeRequest
+)
 router = APIRouter()
 
 # ----------------------------
@@ -88,3 +106,71 @@ async def analyze_similarity_api(file: UploadFile = File(...)):
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
 
+@router.post("/fill/", response_model=FillMissingPartsResponse)
+async def fill_missing(file: UploadFile = File(...)):
+    filled = fill_missing_parts(file)
+    return FillMissingPartsResponse(completed_text=filled)
+
+@router.post("/evaluate-script", response_model=ScriptEvaluateResponse)
+async def evaluate_script_api(request: ScriptEvaluateRequest):
+    try:
+        result = evaluate_script(request.script_text)
+        return ScriptEvaluateResponse(
+            correct_sentences=result["correct_sentences"],
+            incorrect_sentences=result["incorrect_sentences"]
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"스크립트 평가 중 오류 발생: {str(e)}"}
+        )
+    
+@router.post("/analyze-similarity", response_model=SimilarityAnalyzeResponse)
+async def analyze_similarity_api(file: UploadFile = File(...)):
+    try:
+        result = analyze_similarity(
+            file
+        )
+        return SimilarityAnalyzeResponse(
+            average_similarity=result["average_similarity"],
+            most_similar_sentences=result["most_similar_sentences"],
+            least_similar_sentences=result["least_similar_sentences"]
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error during similarity analysis: {str(e)}"}
+        )
+
+@router.post("/upload-proposal")
+async def upload_proposal(file: UploadFile = File(...)):
+    try:
+        create_proposal_vector_db(file)
+        return {"message": "Vector DB created successfully."}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    
+@router.post("/summarize-proposal")
+async def summarize(file: UploadFile = File(...)):
+    comment ='시작은 함'
+    try:
+        summary = summarize_proposal(file)
+        comment = summary
+        agents = create_judge_agents(summary["priority_criteria"])
+        comment ='create 끝'
+
+        judges_summary = [
+            {
+                "name": agent["name"],
+                "criteria": agent["criteria"]
+            } for agent in agents
+        ]
+
+        # 전체 결과 구성
+        return {
+            "overall_summary": summary["overall_summary"],
+            "judges": judges_summary
+        }
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)+comment})
+    

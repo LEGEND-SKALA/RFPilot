@@ -1,10 +1,11 @@
 import api.models.vector_store as vs
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.llms import OpenAI
-from langchain.chains import LLMChain
+from langchain_community.llms.openai import OpenAI  # 일반적인 텍스트 응답용
+from langchain_core.runnables import RunnableSequence
 from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 from nltk.tokenize import sent_tokenize
 import nltk
 
@@ -37,12 +38,12 @@ def judge_relevance(sentence: str, reference: str) -> str:
         """
     )
     llm = OpenAI(temperature=0)
-    chain = LLMChain(llm=llm, prompt=prompt_template)
+    chain = RunnableSequence([prompt_template, llm, StrOutputParser()])
     return chain.run({"sentence": sentence, "reference": reference}).strip()
 
 # 4. 전체 평가 흐름
 def evaluate_script(script_text: str):
-    embedding_model = HuggingFaceEmbeddings(model_name="jhgan/ko-sbert-nli")
+    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     sentences = split_text_into_sentences(script_text)
     suitable = []
     unsuitable = []

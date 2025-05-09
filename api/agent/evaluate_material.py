@@ -4,8 +4,8 @@ from docx import Document as DocxDocument
 from pptx import Presentation
 import nltk
 from nltk.tokenize import sent_tokenize
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_huggingface import HuggingFaceEmbeddings
 import api.models.vector_store as vs
 
 nltk.download("punkt")
@@ -39,7 +39,7 @@ def analyze_similarity(file_path: str, vector_db_path: str, top_k: int = 3):
     sentences = sent_tokenize(text)
 
     # 벡터 DB 로딩
-    embedding_model = HuggingFaceEmbeddings(model_name="jhgan/ko-sbert-nli")
+    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     scored_sentences = []
     for idx, sentence in enumerate(sentences):
