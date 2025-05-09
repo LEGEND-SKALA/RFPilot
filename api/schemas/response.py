@@ -21,6 +21,7 @@ class SimilarityAnalyzeResponse(BaseModel):
     average_similarity: float
     most_similar_sentences: List[ScoredSentence]
     least_similar_sentences: List[ScoredSentence]
+    evaluated_sentences : List[str]
     suitability_score: int 
 
 class SummaryResponse(BaseModel):

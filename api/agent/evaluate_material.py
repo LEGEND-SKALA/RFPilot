@@ -4,14 +4,10 @@ from docx import Document as DocxDocument
 from pptx import Presentation
 import nltk
 from nltk.tokenize import sent_tokenize
-<<<<<<< HEAD
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-=======
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
->>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
 import api.models.vector_store as vs
+from fastapi import UploadFile, File
 
 nltk.download("punkt")
 
@@ -38,9 +34,15 @@ def extract_text(file_path: str) -> str:
     else:
         raise ValueError(f"지원하지 않는 파일 형식입니다: {ext}")
 
+async def extract_text_from_file(file):
+    contents = await file.read()
+    with fitz.open(stream=contents, filetype="pdf") as doc:
+        text = "\n".join([page.get_text() for page in doc])
+    return text
+
 # === [2] 문장 유사도 분석 ===
-def analyze_similarity(file_path: str, vector_db_path: str, top_k: int = 3):
-    text = extract_text(file_path)
+def analyze_similarity(file: UploadFile = File(...), top_k: int = 3):
+    text = extract_text_from_file(file)
     sentences = sent_tokenize(text)
 
     # 벡터 DB 로딩

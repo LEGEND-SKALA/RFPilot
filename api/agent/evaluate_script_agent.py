@@ -1,5 +1,4 @@
 import api.models.vector_store as vs
-<<<<<<< HEAD
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -7,14 +6,6 @@ from langchain_community.llms.openai import OpenAI  # 일반적인 텍스트 응
 from langchain_core.runnables import RunnableSequence
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-=======
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.llms import OpenAI
-from langchain.chains import LLMChain
-from langchain.prompts import PromptTemplate
->>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
 from nltk.tokenize import sent_tokenize
 import nltk
 
