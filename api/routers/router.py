@@ -1,6 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from typing import List
+<<<<<<< HEAD
+=======
+
+>>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
 from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script_agent import evaluate_script
@@ -103,6 +107,7 @@ async def analyze_similarity_api(file: UploadFile = File(...)):
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
 
+<<<<<<< HEAD
 @router.post("/fill/", response_model=FillMissingPartsResponse)
 async def fill_missing(file: UploadFile = File(...)):
     filled = fill_missing_parts(file)
@@ -171,3 +176,5 @@ async def summarize(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)+comment})
     
+=======
+>>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1

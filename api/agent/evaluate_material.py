@@ -4,8 +4,13 @@ from docx import Document as DocxDocument
 from pptx import Presentation
 import nltk
 from nltk.tokenize import sent_tokenize
+<<<<<<< HEAD
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
+=======
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+>>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
 import api.models.vector_store as vs
 
 nltk.download("punkt")

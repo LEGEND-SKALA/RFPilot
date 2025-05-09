@@ -23,7 +23,11 @@ def search_similar_docs(query: str, top_k: int = 3):
 
 # 3. LLM을 이용해 문서 보완
 from fastapi import UploadFile
+<<<<<<< HEAD
 from langchain import OpenAI, PromptTemplate
+=======
+from langchain import OpenAI, LLMChain, PromptTemplate
+>>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
 from langchain.vectorstores.base import VectorStoreRetriever  # vector_db 타입 힌트
 from typing import List
 
@@ -60,7 +64,11 @@ def fill_missing_parts(file: UploadFile, vector_db: VectorStoreRetriever) -> str
         """
     )
 
+<<<<<<< HEAD
     chain = chain = RunnableSequence([prompt_template, llm, StrOutputParser()])
+=======
+    chain = LLMChain(llm=llm, prompt=prompt_template)
+>>>>>>> 021f1ebc458ed13ed652fcf7e0d6ce9d2bfafbe1
     references_combined = "\n\n".join(reference_texts)
     output = chain.run({"incomplete": incomplete_text, "references": references_combined})
     return output

@@ -1,4 +1,5 @@
 from langchain_community.vectorstores import FAISS
+
 from langchain_huggingface import HuggingFaceEmbeddings
 
 # LangChain 호환 Embedding 객체
