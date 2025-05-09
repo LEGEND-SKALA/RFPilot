@@ -84,22 +84,20 @@ const goToSummary = async () => {
   formData.append('service_description', 'AI 분석 서비스')
   formData.append('judge_count', 3)
 
-  isLoading.value = true
   console.log('📤 Uploading file...')
-
-  try {
-    const res = await axios.post('http://127.0.0.1:8000/proposal', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-
+  // Begin backend request, but don't wait for result here
+  axios.post('http://127.0.0.1:8000/proposal', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }).then((res) => {
     console.log('✅ Upload Success:', res.data)
     sessionStorage.setItem('analysisResult', JSON.stringify(res.data))
-    router.push('/summary')
-  } catch (err) {
+  }).catch((err) => {
     console.error('❌ Upload failed:', err)
-  } finally{
-    isLoading.value = false
-  }
+    sessionStorage.setItem('uploadError', 'true')
+  })
+
+  // Go to loading page immediately
+  router.push('/loading')
 }
 </script>
 
