@@ -12,6 +12,8 @@ from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script import evaluate_script
 from api.agent.evaluate_material import analyze_similarity
 from fastapi.responses import JSONResponse
+from api.services.createdb import create_proposal_vector_db
+from api.agent.summarize import summarize_proposal
 router = APIRouter()
 
 @router.post("", response_model=PitchEvaluateResponse)
@@ -57,3 +59,18 @@ async def analyze_similarity_api(file: UploadFile = File(...)):
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
 
+@router.post("/upload-proposal")
+async def upload_proposal(file: UploadFile = File(...)):
+    try:
+        create_proposal_vector_db(file)
+        return {"message": "Vector DB created successfully."}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+@router.post("/summarize-proposal")
+async def summarize(file: UploadFile = File(...)):
+    try:
+        summary = summarize_proposal(file)
+        return summary
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
