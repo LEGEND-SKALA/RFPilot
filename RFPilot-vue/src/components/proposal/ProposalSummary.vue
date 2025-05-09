@@ -7,18 +7,18 @@
       <h1>분석 결과</h1>
       <div class="block">
         <h4>제안서 요약</h4>
-        <textarea readonly>어쩌구 저쩌구</textarea>
+        <textarea readonly v-model="summary"></textarea>
       </div>
 
       <div class="block">
         <h4>AI 심사위원 평가</h4>
         <img src="../../assets/judges.png" alt="Judging Robots" class="judges" />
-        <textarea readonly>어쩌구 저쩌구 하하하 짱</textarea>
+        <textarea readonly v-model="judges"></textarea>
       </div>
 
       <div class="block">
         <h4>트렌드 기반 기능 제안</h4>
-        <textarea readonly>어쩌구 저쩌구</textarea>
+        <textarea readonly v-model="trendSuggestions"></textarea>
       </div>
     </section>
   </div>
@@ -27,12 +27,32 @@
 <script setup>
 import SidebarMenu from '../common/SidebarMenu.vue'
 import Header from '../common/Header.vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-const router = useRouter()
 
-const goTo = (target) => {
-  router.push(`/${target}`)
-}
+const router = useRouter()
+const summary = ref('')
+const judges = ref('')
+const trendSuggestions = ref('')
+
+// const goTo = (target) => {
+//   router.push(`/${target}`)
+// }
+
+const normalize = (data) => Array.isArray(data) ? data.join('\n') : String(data)
+
+onMounted(() => {
+  const result = JSON.parse(sessionStorage.getItem('analysisResult'))
+
+  if (!result) {
+    router.push('/')
+    return
+  }
+
+  summary.value = normalize(result.summary)
+  judges.value = normalize(result.judges)
+  trendSuggestions.value = normalize(result.trend_suggestions)
+})
 
 </script>
 
