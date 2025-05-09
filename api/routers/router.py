@@ -3,9 +3,9 @@ from fastapi.responses import JSONResponse
 from typing import List
 
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
-from api.agent.prototype_generator import fill_missing_parts
-from api.agent.evaluate_script_agent import evaluate_script
-from api.agent.evaluate_material import analyze_similarity
+# from api.agent.prototype_generator import fill_missing_parts
+# from api.agent.evaluate_script_agent import evaluate_script
+# from api.agent.evaluate_material import analyze_similarity
 from api.services.chunking import extract_text_from_file
 from api.services.chunking import chunk_text
 from api.services.embedding import embed_chunks
@@ -66,8 +66,12 @@ async def analyze_proposal(
 # 🔹 피치 평가 관련 API
 # ----------------------------
 @router.post("/pitch-evaluation", response_model=PitchEvaluateResponse)
-async def evaluate_pitch(file: UploadFile = File(...), user_panel_count: int = Form(...)):
-    return await evaluate_pitch_audio(file, user_panel_count)
+async def evaluate_pitch(
+    file: UploadFile = File(...),
+    user_panel_count: int = Form(...),
+    doc_title: str = Form(...)
+):
+    return evaluate_pitch_audio(file, user_panel_count, doc_title)
 
 @router.post("/pitch-evaluation/fill", response_model=FillMissingPartsResponse)
 async def fill_missing(file: UploadFile = File(...)):
