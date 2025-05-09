@@ -43,7 +43,6 @@ const analyzeVoice = async (file) => {
     sessionStorage.setItem('voice_feedback', JSON.stringify(result.panel_feedback))
     sessionStorage.setItem('voice_score', result.suitability_score)
 
-    // ✅ 결과 페이지로 이동
     router.push('/voice-result')
 
   } catch (err) {

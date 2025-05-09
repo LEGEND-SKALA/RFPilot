@@ -98,6 +98,7 @@ const goToSummary = async () => {
   })
 
   // Go to loading page immediately
+  sessionStorage.setItem('nextRoute', '/summary')
   router.push('/loading')
 }
 </script>

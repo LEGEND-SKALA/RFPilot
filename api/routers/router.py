@@ -25,8 +25,8 @@ from api.schemas.request import (
 )
 
 router = APIRouter()
-def extract_text_from_file(file):
-    contents = file.read()
+async def extract_text_from_file(file):
+    contents = await file.read()
     with fitz.open(stream=contents, filetype="pdf") as doc:
         text = "\n".join([page.get_text() for page in doc])
     return text
