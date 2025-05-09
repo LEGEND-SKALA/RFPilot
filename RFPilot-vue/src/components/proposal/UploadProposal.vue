@@ -3,8 +3,10 @@
     <div class="left">
       <img src="../../assets/logo.png" alt="RFPilot Logo" class="logo" />
       <h2 class="subtitle">
-        RFP 작성과 발표, AI가 함께 준비해주는<br />
-        스마트 심사 시뮬레이션
+        제안서 준비, 더 스마트하게. <br />
+        RFP 분석부터 발표 준비까지, <br />
+        AI와 함께
+
       </h2>
       <p class="description">
         내가 만든 제안서, 어떻게 평가받을지 궁금하신가요?<br />
@@ -30,10 +32,8 @@
         class="generate-button"
         @click="goToSummary"
       >
-        생성하기
+        분석하기
       </button>
-
-      <div v-if="isLoading">분석 중입니다... 잠시만 기다려주세요.</div>
 
     </div>
 
@@ -109,7 +109,7 @@ const goToSummary = async () => {
   justify-content: space-between;
   align-items: center;
   height: 100vh;
-  padding: 0 150px; /* 공통 padding */
+  padding: 0 100px; /* 공통 padding */
   box-sizing: border-box;
 }
 .left,
@@ -117,11 +117,10 @@ const goToSummary = async () => {
   max-width: 50%;
 }
 
-
-
 .logo {
-  width: 180px;
+  width: 200px;
   margin-bottom: 20px;
+  margin-left: -23px; 
 }
 
 .subtitle {
