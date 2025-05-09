@@ -6,24 +6,7 @@ from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
 from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script_agent import evaluate_script
 from api.agent.evaluate_material import analyze_similarity
-from api.services.chunking import extract_text_from_file
-from api.services.chunking import chunk_text
-from api.services.embedding import embed_chunks
-
-from api.agent.summary_agent import summarize_proposal
-from api.agent.generate_judges import generate_judges
-from api.agent.analysis_fit_agent import analyze_fit
-from api.agent.suggest_trends_agent import suggest_trends
-
-from api.schemas.response import (
-    PitchEvaluateResponse, FillMissingPartsResponse,
-    ScriptEvaluateResponse, SimilarityAnalyzeResponse
-)
-from api.schemas.request import (
-    FillMissingPartsRequest, ScriptEvaluateRequest,
-    SimilarityAnalyzeRequest
-)
-
+from fastapi.responses import JSONResponse
 router = APIRouter()
 
 # ----------------------------
@@ -90,4 +73,18 @@ async def evaluate_script_api(request: ScriptEvaluateRequest):
     
 @router.post("/analyze-similarity", response_model=SimilarityAnalyzeResponse)
 async def analyze_similarity_api(file: UploadFile = File(...)):
-        return JSONResponse(status_code=500, content={"error": f"스크립트 평가 중 오류 발생: {str(e)}"})
+    try:
+        result = analyze_similarity(
+            file
+        )
+        return SimilarityAnalyzeResponse(
+            average_similarity=result["average_similarity"],
+            most_similar_sentences=result["most_similar_sentences"],
+            least_similar_sentences=result["least_similar_sentences"]
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Error during similarity analysis: {str(e)}"}
+        )
+
