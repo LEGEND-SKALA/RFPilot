@@ -1,8 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from typing import List
-from api.agent.summarize import summarize_proposal
-from api.services.createdb import create_proposal_vector_db
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
 from api.agent.prototype_generator import fill_missing_parts
 from api.agent.evaluate_script_agent import evaluate_script
@@ -10,7 +8,6 @@ from api.agent.evaluate_material import analyze_similarity
 from api.services.chunking import extract_text_from_file
 from api.services.chunking import chunk_text
 from api.services.embedding import embed_chunks
-from api.agent.generate_people import create_judge_agents
 
 from api.agent.summary_agent import summarize_proposal
 from api.agent.generate_judges import generate_judges
