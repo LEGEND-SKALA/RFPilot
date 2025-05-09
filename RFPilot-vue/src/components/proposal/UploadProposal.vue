@@ -32,10 +32,8 @@
         class="generate-button"
         @click="goToSummary"
       >
-        생성하기
+        분석하기
       </button>
-
-      <div v-if="isLoading">분석 중입니다... 잠시만 기다려주세요.</div>
 
     </div>
 
