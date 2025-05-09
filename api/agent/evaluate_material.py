@@ -1,3 +1,4 @@
+
 import os
 import fitz  # PyMuPDF
 from docx import Document as DocxDocument
@@ -9,33 +10,8 @@ from langchain_huggingface import HuggingFaceEmbeddings
 import api.models.vector_store as vs
 from fastapi import UploadFile, File
 
-nltk.download("punkt")
-
-vector_db = vs.load_proposal_vector_db()
-
-# === [1] 문서 텍스트 추출 함수 ===
-def extract_text(file_path: str) -> str:
-    ext = os.path.splitext(file_path)[-1].lower()
-    if ext == ".txt":
-        with open(file_path, "r", encoding="utf-8") as f:
-            return f.read()
-    elif ext == ".pdf":
-        text = ""
-        doc = fitz.open(file_path)
-        for page in doc:
-            text += page.get_text()
-        return text
-    elif ext == ".docx":
-        doc = DocxDocument(file_path)
-        return "\n".join([p.text for p in doc.paragraphs])
-    elif ext == ".pptx":
-        prs = Presentation(file_path)
-        return "\n".join([shape.text for slide in prs.slides for shape in slide.shapes if hasattr(shape, "text")])
-    else:
-        raise ValueError(f"지원하지 않는 파일 형식입니다: {ext}")
-
-async def extract_text_from_file(file):
-    contents = await file.read()
+def extract_text_from_file(file):
+    contents = file.read()
     with fitz.open(stream=contents, filetype="pdf") as doc:
         text = "\n".join([page.get_text() for page in doc])
     return text
@@ -47,7 +23,6 @@ def analyze_similarity(file: UploadFile = File(...), top_k: int = 3):
 
     # 벡터 DB 로딩
     embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
     scored_sentences = []
     for idx, sentence in enumerate(sentences):
         results = vector_db.similarity_search_with_score(sentence, k=top_k)

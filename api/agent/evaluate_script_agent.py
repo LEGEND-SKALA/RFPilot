@@ -32,7 +32,6 @@ def judge_relevance(sentence: str, reference: str) -> str:
 
         다음은 참고 문서입니다:
         "{reference}"
-
         위 문장이 참고 문서 내용과 주제 및 맥락상 적합한 문장인지 판단해 주세요.
         결과는 "적합" 또는 "부적합"으로만 응답하고, 판단 근거는 생략하세요.
         """
@@ -43,7 +42,7 @@ def judge_relevance(sentence: str, reference: str) -> str:
 
 # 4. 전체 평가 흐름
 def evaluate_script(script_text: str):
-    embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    embedding_model = HuggingFaceEmbeddings(model_name="jhgan/ko-sbert-nli")
     sentences = split_text_into_sentences(script_text)
     suitable = []
     unsuitable = []

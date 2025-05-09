@@ -52,6 +52,7 @@
       type: String,
       default: '/',
     },
+    onProcess: Function
   })
   
   const fileInput = ref(null)
@@ -62,15 +63,20 @@
     fileInput.value?.click()
   }
   
+  const uploadedFile = ref(null)
+
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     if (file) {
+      uploadedFile.value = file
       uploadedFileName.value = file.name
     }
   }
-  
-  const goToNext = () => {
-    router.push(props.nextRoute)
+
+  const goToNext = async () => {
+    if (props.onProcess && uploadedFile.value) {
+      await props.onProcess(uploadedFile.value)
+    }
   }
   </script>
   

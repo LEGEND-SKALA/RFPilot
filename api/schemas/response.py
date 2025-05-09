@@ -4,6 +4,7 @@ from typing import List
 class PitchEvaluateResponse(BaseModel): #발표 음성 관련 
     transcript: str
     panel_feedback: List[str]
+    suitability_score: int
 
 class FillMissingPartsResponse(BaseModel):
     completed_text: str  # 보완된 최종 문서

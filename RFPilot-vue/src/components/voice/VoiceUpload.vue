@@ -1,64 +1,59 @@
 <template>
-  <div class="container">
-    <UploadSection
-      title="🎤 발표 음성 업로드"
-      description="발표 음성 파일을 업로드하면, 텍스트로 변환한 뒤 AI 심사위원의 반응을 시뮬레이션해드려요."
-      accept=".mp3,.wav"
-      actionText="심사위원 반응 시뮬레이션 출력"
-      :onProcess="analyzeVoice"
-      nextRoute="/voice-result" 
-    />
-  </div>
-  <!-- template 내에서 -->
-  <button
-    v-if="uploadedFileName"
-    class="generate-button"
-    @click="handleAction"
-    >
-    {{ actionText || "생성하기" }}
-  </button>
+  <UploadSection
+    title="🎤 발표 음성 업로드"
+    description="발표 음성 파일을 업로드하면, AI 심사위원의 평가 결과를 알려드립니다."
+    accept=".mp3,.wav"
+    actionText="AI 평가 실행"
+    :onProcess="analyzeVoice"
+    nextRoute="/voice-result"
+  />
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import UploadSection from '../common/UploadSection.vue'
+import UploadSection from '../../components/common/UploadSection.vue'
 import { useRouter } from 'vue-router'
-
-const props = defineProps({
-  title: String,
-  description: String,
-  actionText: String,
-  accept: String,
-  onProcess: Function,     // 처리 콜백
-  nextRoute: String        // 결과 페이지로 이동할 경로
-})
+import axios from 'axios'
 
 const router = useRouter()
-const fileInput = ref(null)
-const uploadedFile = ref(null)
-const uploadedFileName = ref('')
 
-const triggerFileInput = () => fileInput.value?.click()
+const analyzeVoice = async (file) => {
+  console.log('📦 업로드할 파일:', file)
+  const formData = new FormData()
+  const fileName = sessionStorage.getItem('uploadedFileName')
 
-const handleFileChange = (e) => {
-  uploadedFile.value = e.target.files[0]
-  if (uploadedFile.value) {
-    uploadedFileName.value = uploadedFile.value.name
-  }
-}
+  formData.append('file', file)
+  formData.append('user_panel_count', 3)
+  formData.append('doc_title', fileName)
 
-const handleAction = async () => {
-  if (props.onProcess) {
-    await props.onProcess(uploadedFile.value)
-  }
-  if (props.nextRoute) {
-    router.push(props.nextRoute)
+  try {
+    // ✅ 로딩 페이지로 이동 (요청 전이 아니라, 요청 직후에)
+    sessionStorage.setItem('nextRoute', '/voice-result')
+    router.push('/loading')
+
+    const res = await axios.post('http://127.0.0.1:8000/pitch-evaluation', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    const result = res.data
+    console.log('✅ 평가 결과:', result)
+
+    sessionStorage.setItem('voice_transcript', result.transcript)
+    sessionStorage.setItem('voice_feedback', JSON.stringify(result.panel_feedback))
+    sessionStorage.setItem('voice_score', result.suitability_score)
+
+    // ✅ 결과 페이지로 이동
+    router.push('/voice-result')
+
+  } catch (err) {
+    console.error('❌ 평가 실패:', err)
+    alert('서버 평가 요청에 실패했습니다.')
+
+    // ✅ 실패 시 업로드 페이지로 다시 이동
+    setTimeout(() => {
+      router.push('/voice')
+    }, 500)
   }
 }
 </script>
-
-<style scoped>
-.container {
-  padding: 40px;
-}
-</style>

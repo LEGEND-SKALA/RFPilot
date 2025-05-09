@@ -43,9 +43,10 @@ def run_evaluation(transcript: str, panel_count: int, vector_db) -> List[str]:
             docs_with_score = vector_db.similarity_search_with_score(chunk, k=3)
             context = "\n".join([doc.page_content for doc, _ in docs_with_score])
             
-            # 유사도 평균 계산
+            # 유사도 계산
             scores = [score for _, score in docs_with_score]
-            avg_score = sum(scores) / len(scores)
+            converted_similarities = [1 / (1 + score) for score in scores]  # 안정적인 0~1 정규화
+            avg_score = sum(converted_similarities) / len(converted_similarities)
             similarity_scores.append(avg_score)
 
             prompt = f"""{role_prompt}
@@ -66,18 +67,18 @@ def run_evaluation(transcript: str, panel_count: int, vector_db) -> List[str]:
 
     # 적합도 점수 (0~100)
     average_similarity = sum(similarity_scores) / len(similarity_scores) if similarity_scores else 0
-    suitability_score = int(min(max(average_similarity * 100, 0), 100))  # 안전한 범위로 자르기
-
+    suitability_score = int(min(max(average_similarity * 100, 0), 100))
+    
     return feedback_list, suitability_score
 # 발표 평가 전체 흐름 함수
 
-def evaluate_pitch_audio(file: UploadFile, user_panel_count: int) -> PitchEvaluateResponse:
+def evaluate_pitch_audio(file: UploadFile, user_panel_count: int, doc_title: str) -> PitchEvaluateResponse:
     transcript = transcribe_audio(file)
-    vector_db = load_proposal_vector_db()
+    vector_db = load_proposal_vector_db(doc_title)
     panel_feedback, suitability_score = run_evaluation(transcript, user_panel_count, vector_db)
 
     return PitchEvaluateResponse(
         transcript=transcript,
         panel_feedback=panel_feedback,
-        suitability_score=suitability_score
+        suitability_score=suitability_score,
     )

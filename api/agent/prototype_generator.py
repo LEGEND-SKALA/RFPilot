@@ -1,3 +1,4 @@
+
 import api.models.vector_store as vs
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -21,9 +22,10 @@ def search_similar_docs(query: str, top_k: int = 3):
     docs = vector_db.similarity_search(query, k=top_k)
     return docs
 
+
 # 3. LLM을 이용해 문서 보완
 from fastapi import UploadFile
-from langchain import OpenAI, PromptTemplate
+from langchain import OpenAI, LLMChain, PromptTemplate
 from langchain.vectorstores.base import VectorStoreRetriever  # vector_db 타입 힌트
 from typing import List
 

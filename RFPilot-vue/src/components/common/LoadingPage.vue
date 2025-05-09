@@ -35,22 +35,23 @@
   
   onMounted(() => {
     const checkInterval = setInterval(() => {
-      const result = sessionStorage.getItem('analysisResult')
+      const result = sessionStorage.getItem('analysisResult') || sessionStorage.getItem('voice_transcript')
       const error = sessionStorage.getItem('uploadError')
-  
+      const nextRoute = sessionStorage.getItem('nextRoute') || '/'
+
       if (result) {
         clearInterval(checkInterval)
-        router.push('/summary')
+        sessionStorage.removeItem('nextRoute') // 한 번 쓰고 제거
+        router.push(nextRoute)
       }
-  
+
       if (error) {
         clearInterval(checkInterval)
         alert('분석 중 오류가 발생했습니다.')
         sessionStorage.removeItem('uploadError')
         router.push('/')
       }
-    }, 1000) // check every 1s
-  })
+    }, 1000)})
 </script>
   
 <style scoped>

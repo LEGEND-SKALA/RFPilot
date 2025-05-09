@@ -80,6 +80,7 @@ const goToSummary = async () => {
 
   const formData = new FormData()
   formData.append('file', uploadedFile.value)
+  sessionStorage.setItem('uploadedFileName', uploadedFile.value.name) //세선스토리지에 저장 
   formData.append('company_name', 'YourCompany')
   formData.append('service_description', 'AI 분석 서비스')
   formData.append('judge_count', 3)
