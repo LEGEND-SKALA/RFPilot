@@ -1,34 +1,63 @@
 from fastapi import APIRouter, UploadFile, File, Form
+from fastapi.responses import JSONResponse
 from typing import List
-from api.schemas.response import PitchEvaluateResponse
+
 from api.agent.pitch_evaluation_agent import evaluate_pitch_audio
-from api.schemas.request import FillMissingPartsRequest
-from api.schemas.request import ScriptEvaluateRequest
-from api.schemas.request import SimilarityAnalyzeRequest
-from api.schemas.response import FillMissingPartsResponse
-from api.schemas.response import ScriptEvaluateResponse
-from api.schemas.response import SimilarityAnalyzeResponse
 from api.agent.prototype_generator import fill_missing_parts
-from api.agent.evaluate_script import evaluate_script
+from api.agent.evaluate_script_agent import evaluate_script
 from api.agent.evaluate_material import analyze_similarity
 from fastapi.responses import JSONResponse
-from api.services.createdb import create_proposal_vector_db
-from api.agent.summarize import summarize_proposal
 router = APIRouter()
 
-@router.post("", response_model=PitchEvaluateResponse)
-async def evaluate_pitch(
+# ----------------------------
+# 🔹 분석(summary) 관련 라우트
+# ----------------------------
+@router.post("/proposal")
+async def analyze_proposal(
     file: UploadFile = File(...),
-    user_panel_count: int = Form(...)
+    company_name: str = Form(...),
+    service_description: str = Form(...),
+    judge_count: int = Form(...)
 ):
+    # 1. 텍스트 추출
+    text = await extract_text_from_file(file)
+
+    # 2. 텍스트 청크 분할 및 임베딩 저장
+    chunks = chunk_text(text)
+    embed_chunks(chunks, file.filename)
+
+    # 3. 제안서 요약
+    summary = summarize_proposal(file.filename)
+
+    # 4. 심사위원 생성
+    judges = generate_judges(judge_count, company_name, service_description)
+
+    # 5. 적합도 분석
+    score_by_category = analyze_fit(file.filename, top_k=5)
+
+    # 6. 트렌드 제안
+    suggestions = suggest_trends(file.filename)
+
+    return {
+        "summary": summary,
+        "judges": judges,
+        "fit_score": score_by_category,
+        "trend_suggestions": suggestions
+    }
+
+# ----------------------------
+# 🔹 피치 평가 관련 API
+# ----------------------------
+@router.post("/pitch-evaluation", response_model=PitchEvaluateResponse)
+async def evaluate_pitch(file: UploadFile = File(...), user_panel_count: int = Form(...)):
     return await evaluate_pitch_audio(file, user_panel_count)
 
-@router.post("/fill/", response_model=FillMissingPartsResponse)
+@router.post("/pitch-evaluation/fill", response_model=FillMissingPartsResponse)
 async def fill_missing(file: UploadFile = File(...)):
     filled = fill_missing_parts(file)
     return FillMissingPartsResponse(completed_text=filled)
 
-@router.post("/evaluate-script", response_model=ScriptEvaluateResponse)
+@router.post("/pitch-evaluation/evaluate-script", response_model=ScriptEvaluateResponse)
 async def evaluate_script_api(request: ScriptEvaluateRequest):
     try:
         result = evaluate_script(request.script_text)
@@ -59,18 +88,3 @@ async def analyze_similarity_api(file: UploadFile = File(...)):
             content={"error": f"Error during similarity analysis: {str(e)}"}
         )
 
-@router.post("/upload-proposal")
-async def upload_proposal(file: UploadFile = File(...)):
-    try:
-        create_proposal_vector_db(file)
-        return {"message": "Vector DB created successfully."}
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-@router.post("/summarize-proposal")
-async def summarize(file: UploadFile = File(...)):
-    try:
-        summary = summarize_proposal(file)
-        return summary
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})

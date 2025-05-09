@@ -22,3 +22,15 @@ class SimilarityAnalyzeResponse(BaseModel):
     most_similar_sentences: List[ScoredSentence]
     least_similar_sentences: List[ScoredSentence]
     suitability_score: int 
+
+class SummaryResponse(BaseModel):
+    summary: str
+
+class JudgeResponse(BaseModel):
+    judges: List[str]
+
+class FitScoreResponse(BaseModel):
+    score_by_category: dict
+
+class TrendSuggestionResponse(BaseModel):
+    suggestions: List[str]

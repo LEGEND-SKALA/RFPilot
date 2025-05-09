@@ -25,3 +25,15 @@ class ScriptEvaluateRequest(BaseModel):
 class SimilarityAnalyzeRequest(BaseModel):
     file_path: str
     top_k: int = 3
+class InitialSetupRequest(BaseModel):
+    company_name: str
+    service_description: str
+    judge_count: int
+
+class SimilarityAnalyzeRequest(BaseModel):
+    doc_title: str
+    top_k: int
+
+class FillMissingPartsRequest(BaseModel):
+    incomplete_text: str
+    reference_texts: List[str]

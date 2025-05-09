@@ -6,7 +6,7 @@ def load_proposal_vector_db():
     embedding = OpenAIEmbeddings()
 
     vector_db = FAISS.load_local(
-        "proposal_vector_db",
+        "faiss_store",
         embeddings=embedding,
         allow_dangerous_deserialization=True  #pkl 파일 허용
     )
